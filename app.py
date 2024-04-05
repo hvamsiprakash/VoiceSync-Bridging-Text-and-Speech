@@ -366,21 +366,19 @@ st.write("""
 uploaded_file = st.file_uploader("Upload audio file", type=["mp3", "wav"])
 
 if uploaded_file is not None:
-    audio_data = uploaded_file.read()
-
-    st.audio(audio_data, format="audio/wav", start_time=0)
-
-    r = sr.Recognizer()
     try:
         with sr.AudioFile(uploaded_file) as source:
-            audio_text = r.listen(source)
-            text = r.recognize_google(audio_text)
+            audio_data = source.read()
+            r = sr.Recognizer()
+            text = r.recognize_google(audio_data)
             st.write("Transcribed text:")
             st.write(text)
     except sr.UnknownValueError:
         st.write("Google Speech Recognition could not understand the audio")
     except sr.RequestError as e:
         st.write("Could not request results from Google Speech Recognition service; {0}".format(e))
+    except Exception as e:
+        st.write("Error occurred: {0}".format(e))
 
 def remove_text_files(n):
     text_files = glob.glob("temp_text/*")
