@@ -157,22 +157,6 @@ languages = {
     "Korean": "ko",
     "Chinese": "zh-cn",
     "Japanese": "ja",
-    "Spanish": "es",
-    "French": "fr",
-    "Arabic": "ar",
-    "German": "de",
-    "Russian": "ru",
-    "Portuguese": "pt",
-    "Italian": "it",
-    "Dutch": "nl",
-    "Turkish": "tr",
-    "Vietnamese": "vi",
-    "Thai": "th",
-    "Greek": "el",
-    "Swedish": "sv",
-    "Polish": "pl",
-    "Indonesian": "id",
-    "Czech": "cs",
     # Add more languages here
 }
 
@@ -191,8 +175,8 @@ pitch = st.sidebar.slider("Pitch", min_value=0.5, max_value=2.0, value=1.0, step
 
 text = st.text_area("Enter text", height=200)
 
-def text_to_speech(input_language, output_language, text, speed, volume, pitch):
-    # Map language codes to gTTS-compatible language codes
+def text_to_speech(input_language, output_language, text, tld):
+    # Language mapping for gTTS compatibility
     language_mapping = {
         "en": "en",
         "hi": "hi",
@@ -200,23 +184,6 @@ def text_to_speech(input_language, output_language, text, speed, volume, pitch):
         "ko": "ko",
         "zh-cn": "zh",
         "ja": "ja",
-        "es": "es",
-        "fr": "fr",
-        "ar": "ar",
-        "de": "de",
-        "ru": "ru",
-        "pt": "pt",
-        "it": "it",
-        "nl": "nl",
-        "tr": "tr",
-        "vi": "vi",
-        "th": "th",
-        "el": "el",
-        "sv": "sv",
-        "pl": "pl",
-        "id": "id",
-        "cs": "cs"
-        # Add more mappings as needed
     }
     
     # Translate text
@@ -230,27 +197,19 @@ def text_to_speech(input_language, output_language, text, speed, volume, pitch):
     
     # Generate speech
     tts = gTTS(trans_text, lang=gtts_output_language, slow=False)
-    tts.speed = speed
-    tts.volume = volume
-    tts.pitch = pitch
+    tts.save("temp/audio.mp3")
     
-    try:
-        my_file_name = text[0:20]
-    except:
-        my_file_name = "audio"
-    tts.save(f"temp/{my_file_name}.mp3")
-    
-    return my_file_name, trans_text, output_language
+    return trans_text
 
 if st.button("Convert"):
     try:
-        result, output_text, converted_language = text_to_speech(input_language, output_language, text, speed, volume, pitch)
-        audio_file = open(f"temp/{result}.mp3", "rb")
+        output_text = text_to_speech(input_language, output_language, text, tld="")
+        audio_file = open("temp/audio.mp3", "rb")
         audio_bytes = audio_file.read()
         st.markdown("### Your audio:")
         st.audio(audio_bytes, format="audio/mp3", start_time=0)
-        st.write(f"**Converted Language:** {converted_language}")
-        st.write(f"**Converted Speech:** {output_text}")
+        st.markdown("### Output text:")
+        st.write(output_text)
     except ValueError as e:
         st.error(str(e))
 
@@ -265,4 +224,3 @@ def remove_files(n):
                 os.remove(f)
 
 remove_files(7)
-
