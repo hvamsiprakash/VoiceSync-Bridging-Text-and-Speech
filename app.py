@@ -171,6 +171,7 @@ languages = {
     "Russian": "ru",
     "Italian": "it",
     "Portuguese": "pt",
+    # Add more languages here
 }
 
 input_lang = st.selectbox("Select input language", list(languages.keys()))
