@@ -236,16 +236,6 @@ if st.button("Convert"):
             st.markdown("## Output text:")
             st.write(f" {result[1]}")
 
-        # Highlighting text synchronized with speech output
-        audio = AudioSegment.from_mp3(f"temp/{result[0]}.mp3")
-        durations = np.cumsum([0] + [len(chunk) for chunk in audio])
-        st.markdown("## Highlighted Text:")
-        for i in range(len(text)):
-            st.markdown(
-                f"<span style='background-color: {'yellow' if durations[i] <= len(audio) else 'white'}'>{text[i]}</span>",
-                unsafe_allow_html=True,
-            )
-
 
 def remove_files(n):
     mp3_files = glob.glob("temp/*mp3")
