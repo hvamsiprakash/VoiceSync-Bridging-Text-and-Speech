@@ -258,4 +258,3 @@ def remove_files(n):
 
 
 remove_files(7)
-
