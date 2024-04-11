@@ -128,8 +128,6 @@ import streamlit as st
 import os
 import time
 import glob
-import os
-os.environ["PATH"] += os.pathsep + "/path/to/ffmpeg/directory"
 from gtts import gTTS
 from googletrans import Translator
 from pydub import AudioSegment
@@ -260,3 +258,4 @@ def remove_files(n):
 
 
 remove_files(7)
+
